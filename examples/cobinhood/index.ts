@@ -85,7 +85,7 @@ const handleReceivedTicker = (data: Ticker) => {
 
 // do something with order book data
 const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
-  const { bids, asks, symbol } = data;
+  const { bids, asks, symbol, isSnapshot } = data;
 
   book[symbol] = book[symbol] || { bids: {}, asks: {} };
 
@@ -93,14 +93,20 @@ const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
     const { price, count } = ask;
     const oldCount = book[symbol].asks[ask.price];
 
-    book[symbol].asks[ask.price] = (oldCount || zero).plus(new Decimal(count || 0));
+    const newValue = new Decimal(count || 0);
+    const value = isSnapshot ? newValue : (oldCount || zero).plus(newValue);
+
+    book[symbol].asks[ask.price] = value;
   });
 
   bids.forEach((bid: OrderBookEntry) => {
     const { price, count } = bid;
     const oldCount = book[symbol].bids[bid.price];
 
-    book[symbol].bids[bid.price] = (oldCount || zero).plus(new Decimal(count || 0));
+    const newValue = new Decimal(count || 0);
+    const value = isSnapshot ? newValue : (oldCount || zero).plus(newValue);
+
+    book[symbol].bids[bid.price] = newValue;
   });
 
   printOrderBook();
