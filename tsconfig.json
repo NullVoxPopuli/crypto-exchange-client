@@ -1,27 +1,44 @@
 {
   "compilerOptions": {
     "rootDir": "src",
+    "baseUrl": "src",
     "outDir": "dist",
+    "paths": {
+      "*": ["*", "src/typings/*"],
+      "~/*": ["*"]
+    },
+    "typeRoots": [
+      "src/typings",
+      "./node_modules/@types"
+    ],
     "target": "es5",
     "module": "commonjs",
     "lib": ["es6", "dom"],
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "sourceMap": false,
-    "allowJs": false,
-    "noResolve": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": false,
+
     "noImplicitAny": true,
+
+    "suppressImplicitAnyIndexErrors": false,
+
     "strictNullChecks": true,
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "skipLibCheck": true,
+
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
