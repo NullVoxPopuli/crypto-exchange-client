@@ -14,6 +14,9 @@
     "test": "mocha --reporter spec",
     "example": "./node_modules/.bin/ts-node --no-cache -r tsconfig-paths/register "
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/decimal.js": "^7.4.0",
     "@types/lodash": "^4.14.104",

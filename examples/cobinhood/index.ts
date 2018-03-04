@@ -20,6 +20,7 @@ const book: {
 Decimal.set({ precision: 8 }); // one more than max on exchange
 
 const zero = new Decimal(0);
+const small = new Decimal(0.0000001);
 
 async function begin() {
   const client = new CobinhoodRestClient();
@@ -129,7 +130,7 @@ function printOrderBook() {
   const outstandingBids = _.pickBy(bids, (value, _price) => (
     value !== undefined &&
     value !== null &&
-    !value.isZero()
+    value.greaterThan(small)
   ));
 
   Object.keys(outstandingAsks).sort().slice(0, 10).reverse().forEach(price => {

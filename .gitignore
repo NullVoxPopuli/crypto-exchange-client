@@ -4,6 +4,9 @@ package-lock.json
 *.d.ts
 *.js.map
 *.js
+/base
+/index.js
+/exchanges
 
 # Logs
 logs
