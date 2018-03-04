@@ -38,10 +38,6 @@ export default class OrderBookUpdate implements OrderBookUpdateSummary {
         } else {
           this.isSnapshot = false;
         }
-        console.log('snapshot', this.isSnapshot);
-
-        // console.log('json: ', json);
-        // this.isSnapshot = (json.snapshot && true) || false;
 
         const { bids, asks } = data;
 

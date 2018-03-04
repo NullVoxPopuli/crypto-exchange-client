@@ -89,7 +89,6 @@ const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
 
   book[symbol] = book[symbol] || { bids: {}, asks: {} };
 
-  console.log(isSnapshot, !!data.info.snapshot, data.isSnapshot, !data.info.snapshot);
   asks.forEach((ask: OrderBookEntry) => {
     const { price, count } = ask;
     const oldCount = book[symbol].asks[ask.price];
