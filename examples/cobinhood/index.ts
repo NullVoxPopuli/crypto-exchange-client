@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 import * as _ from 'lodash';
 import {
   AbstractRestClient, AbstractWebSocketClient, AssetBalances, MarketPair,
-  OrderBookDelta, OrderBookEntry, Ticker,
+  OrderBookEntry, OrderBookUpdateSummary, Ticker,
 } from '~/base';
 
 import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
@@ -80,7 +80,7 @@ const handleReceivedTicker = (data: Ticker) => {
 };
 
 // do something with order book data
-const handleReceivedOrderBookUpdate = (data: OrderBookDelta) => {
+const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
   const { bids, asks, symbol } = data;
 
   book[symbol] = book[symbol] || { bids: {}, asks: {} };

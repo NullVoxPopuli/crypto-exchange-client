@@ -1,10 +1,10 @@
-import { OrderBookEntry, OrderBookDelta } from '~/base/order-book-entry';
+import { OrderBookEntry, OrderBookUpdateSummary } from '~/base/order-book-entry';
 
 const PRICE = 0;
 const SIZE = 1;
 const COUNT = 2;
 
-export default class OrderBookUpdate implements OrderBookDelta {
+export default class OrderBookUpdate implements OrderBookUpdateSummary {
     // from OrderBook
     public info: any;
     public channelId: any;
