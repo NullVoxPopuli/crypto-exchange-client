@@ -1,7 +1,9 @@
 import Decimal from 'decimal.js';
 import fetch from 'node-fetch';
 
-import { AbstractRestClient, AssetBalances, MarketPair, Order, RequestError, RestClient } from '~/base';
+import {
+  AbstractRestClient, AssetBalances, MarketPair, Order, RequestError, RestClient,
+} from '~/base';
 import {
   extractBalances,
   extractMarkets,

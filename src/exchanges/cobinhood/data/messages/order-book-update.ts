@@ -1,4 +1,4 @@
-import { OrderBookEntry, OrderBookUpdateSummary } from '~/base/order-book-entry';
+import { OrderBookEntry, OrderBookUpdateSummary } from '~/base';
 
 const PRICE = 0;
 const SIZE = 1;

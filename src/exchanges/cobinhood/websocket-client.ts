@@ -1,5 +1,7 @@
-import { AbstractWebSocketClient, ExchangeWebSocketFeed } from '~/base';
 import * as WebSocket from 'ws';
+
+import { AbstractWebSocketClient, ExchangeWebSocketFeed } from '~/base';
+
 import OrderBookUpdate from './data/messages/order-book-update';
 import TickerUpdate from './data/messages/ticker-update';
 

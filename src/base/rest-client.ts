@@ -1,4 +1,4 @@
-import { AssetBalances } from '~/base';
+import { AssetBalances } from './asset-balances';
 
 import * as _ from 'lodash';
 import { MarketPair } from './market-pair';

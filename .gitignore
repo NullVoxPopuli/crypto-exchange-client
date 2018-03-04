@@ -1,5 +1,9 @@
 # Build directory for npm
 dist/
+package-lock.json
+*.d.ts
+*.js.map
+*.js
 
 # Logs
 logs

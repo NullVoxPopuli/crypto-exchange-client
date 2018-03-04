@@ -6,11 +6,11 @@
   "author": "Preston Sego <LPSego3+dev@gmail.com>",
   "license": "MIT",
   "private": false,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index",
+  "typings": "dist/index",
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "tsc",
+    "build": "./node_modules/.bin/tsc",
+    "prepublishOnly": "./node_modules/.bin/tsc",
     "test": "mocha --reporter spec",
     "example": "./node_modules/.bin/ts-node --no-cache -r tsconfig-paths/register "
   },
@@ -23,7 +23,7 @@
     "ts-node": "^5.0.1",
     "tsconfig-paths": "^3.1.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.0-dev.20180302"
   },
   "dependencies": {
     "decimal.js": "^9.0.1",

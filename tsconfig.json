@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "rootDir": "src",
+    "declaration": true,
     "baseUrl": "src",
-    "outDir": "dist",
+    "outDir": ".",
     "paths": {
       "*": ["*", "src/typings/*"],
+      "~/*": ["*"],
       "~/*": ["*"]
     },
     "typeRoots": [

@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js';
+import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
 import {
   AbstractRestClient, AbstractWebSocketClient, AssetBalances, MarketPair,
@@ -6,6 +7,8 @@ import {
 } from '~/base';
 
 import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
+
+dotenv.config({ path: '.env' });
 
 const book: {
   [symbol: string]: {
@@ -94,7 +97,7 @@ const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
 
   bids.forEach((bid: OrderBookEntry) => {
     const { price, count } = bid;
-    const oldCount = book[symbol].asks[bid.price];
+    const oldCount = book[symbol].bids[bid.price];
 
     book[symbol].bids[bid.price] = (oldCount || zero).plus(new Decimal(count || 0));
   });
