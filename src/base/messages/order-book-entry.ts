@@ -1,7 +1,7 @@
 export interface OrderBookEntry {
-  price: number;
-  size: number;
-  count: number;
+  price: string;
+  size: string;
+  count: string;
 }
 
 export interface OrderBookUpdateSummary {
@@ -11,6 +11,8 @@ export interface OrderBookUpdateSummary {
 
     highestBid: number;
     lowestAsk: number;
+
+    isSnapshot: boolean;
 
     sizeAtHighestBid: number;
     sizeAtLowestAsk: number;

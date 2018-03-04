@@ -53,7 +53,8 @@ export default class CobinhoodFeed extends AbstractWebSocketClient implements Ex
       if (channelId.includes('ticker')) {
         this.didReceiveTicker(new TickerUpdate(json));
       } else if (channelId.includes('order-book')) {
-        this.didReceiveOrderBookUpdate(new OrderBookUpdate(json));
+        const update = new OrderBookUpdate(json);
+        this.didReceiveOrderBookUpdate(update);
       }
     } else {
       console.log('else? ', payload);

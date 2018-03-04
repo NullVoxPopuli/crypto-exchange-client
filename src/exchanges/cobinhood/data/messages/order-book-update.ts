@@ -12,6 +12,8 @@ export default class OrderBookUpdate implements OrderBookUpdateSummary {
     public highestBid: number;
     public lowestAsk: number;
 
+    public isSnapshot: boolean;
+
     public bids: OrderBookEntry[];
     public asks: OrderBookEntry[];
 
@@ -30,6 +32,16 @@ export default class OrderBookUpdate implements OrderBookUpdateSummary {
         this.symbol = channelParts[1];
 
         const data = json.update || json.snapshot;
+
+        if (json.snapshot) {
+          this.isSnapshot = true;
+        } else {
+          this.isSnapshot = false;
+        }
+        console.log('snapshot', this.isSnapshot);
+
+        // console.log('json: ', json);
+        // this.isSnapshot = (json.snapshot && true) || false;
 
         const { bids, asks } = data;
 
