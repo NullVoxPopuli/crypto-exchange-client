@@ -27,7 +27,6 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
         ['size']: amount,
       };
 
-      console.log(payload);
       const response = await this.post('trading/orders', payload);
 
       return extractOrder(response.result.order);
