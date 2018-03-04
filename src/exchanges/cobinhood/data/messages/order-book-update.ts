@@ -1,16 +1,19 @@
-import { OrderBookEntry } from '~/base/order-book-entry';
+import { OrderBookEntry, OrderBookDelta } from '~/base/order-book-entry';
 
 const PRICE = 0;
 const SIZE = 1;
 const COUNT = 2;
 
-export default class OrderBookUpdate implements OrderBookEntry {
+export default class OrderBookUpdate implements OrderBookDelta {
     // from OrderBook
     public info: any;
     public channelId: any;
     public symbol: string;
     public highestBid: number;
     public lowestAsk: number;
+
+    public bids: OrderBookEntry[];
+    public asks: OrderBookEntry[];
 
     // Note that negative numbers
     // mean that the specified amount
@@ -29,6 +32,18 @@ export default class OrderBookUpdate implements OrderBookEntry {
         const data = json.update || json.snapshot;
 
         const { bids, asks } = data;
+
+        this.bids = data.bids.map((b: number[]) => ({
+          price: b[PRICE],
+          size: b[SIZE],
+          count: b[COUNT],
+        }));
+
+        this.asks = data.asks.map((a: number[]) => ({
+          price: a[PRICE],
+          size: a[SIZE],
+          count: a[COUNT],
+        }));
 
         const highestBid = bids[0];
         const lowestAsk = asks[0];

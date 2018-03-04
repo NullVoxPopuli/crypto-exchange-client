@@ -1,6 +1,22 @@
+import Decimal from 'decimal.js';
 import * as _ from 'lodash';
-import { AbstractRestClient, AbstractWebSocketClient, AssetBalances, MarketPair, OrderBookEntry, Ticker } from '~/base';
+import {
+  AbstractRestClient, AbstractWebSocketClient, AssetBalances, MarketPair,
+  OrderBookDelta, OrderBookEntry, Ticker,
+} from '~/base';
+
 import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
+
+const book: {
+  [symbol: string]: {
+    [side: string]: {
+      [price: number]: Decimal },
+  },
+} = {};
+
+Decimal.set({ precision: 8 }); // one more than max on exchange
+
+const zero = new Decimal(0);
 
 async function begin() {
   const client = new CobinhoodRestClient();
@@ -46,13 +62,14 @@ const handleOpen = (socket: AbstractWebSocketClient, client: AbstractRestClient)
   const marketsBySymbol = client.marketPairsBySymbol;
   const symbols = Object.keys(marketsBySymbol);
 
-  symbols.forEach(symbol => {
-    const market = marketsBySymbol[symbol];
-    const precision = market.precision;
+  // symbols.forEach(symbol => {
+  const symbol = 'ETH-BTC';
+  const market = marketsBySymbol[symbol];
+  const precision = 7; // market.precision - 1;
 
-    socket.subscribeTo('ticker', { trading_pair_id: symbol });
-    socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision - 1}` });
-  });
+  socket.subscribeTo('ticker', { trading_pair_id: symbol });
+  socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
+  // });
 };
 
 // do something with ticker data
@@ -63,12 +80,27 @@ const handleReceivedTicker = (data: Ticker) => {
 };
 
 // do something with order book data
-const handleReceivedOrderBookUpdate = (data: OrderBookEntry) => {
-  console.log(`
-    [Order Book Update] ${data.symbol}:
-      highest bid: ${data.sizeAtHighestBid} @ ${data.highestBid}
-      lowest ask:  ${data.sizeAtLowestAsk} @ ${data.lowestAsk}
-      `);
+const handleReceivedOrderBookUpdate = (data: OrderBookDelta) => {
+  const { bids, asks, symbol } = data;
+
+  book[symbol] = book[symbol] || { bids: {}, asks: {} };
+
+  asks.forEach((ask: OrderBookEntry) => {
+    const { price, count } = ask;
+    const oldCount = book[symbol].asks[ask.price];
+
+    book[symbol].asks[ask.price] = (oldCount || zero).plus(new Decimal(count || 0));
+  });
+
+  bids.forEach((bid: OrderBookEntry) => {
+    const { price, count } = bid;
+    const oldCount = book[symbol].asks[bid.price];
+
+    book[symbol].bids[bid.price] = (oldCount || zero).plus(new Decimal(count || 0));
+  });
+
+  printOrderBook();
+
 };
 
 // json here is a subscription response, which mostly contains
@@ -76,5 +108,36 @@ const handleReceivedOrderBookUpdate = (data: OrderBookEntry) => {
 const handleSubscribe = (json: any) => {
   console.log(json);
 };
+
+function printOrderBook() {
+  const markets = Object.keys(book);
+
+  console.log('\n\n', markets[0]);
+  const bids = book[markets[0]].bids;
+  const asks = book[markets[0]].asks;
+
+  console.log('asks');
+  const outstandingAsks = _.pickBy(asks, (value, _price) => (
+    value !== undefined &&
+    value !== null &&
+    !value.isZero()
+  ));
+
+  const outstandingBids = _.pickBy(bids, (value, _price) => (
+    value !== undefined &&
+    value !== null &&
+    !value.isZero()
+  ));
+
+  Object.keys(outstandingAsks).sort().slice(0, 10).reverse().forEach(price => {
+    console.log(price, outstandingAsks[price].toNumber());
+  });
+
+  console.log('bids');
+  Object.keys(outstandingBids).sort().reverse().slice(0, 10).forEach(price => {
+    console.log(price, outstandingBids[price].toNumber());
+  });
+
+}
 
 begin();
