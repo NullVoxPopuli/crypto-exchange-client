@@ -130,16 +130,21 @@ export class MarketPair {
 
   private sortBids(bids: OrderBook): string[] {
     const outstandingBids = _.pickBy(bids, isPresent);
+    const prices = Object.keys(outstandingBids);
 
     // sort is ascending, reverse puts the biggest at top
-    return Object.keys(outstandingBids).sort().reverse();
+    const sorted = _.sortBy(prices, Number);
+
+    return sorted.reverse();
   }
 
   private sortAsks(asks: OrderBook): string[] {
     const outstandingAsks = _.pickBy(asks, isPresent);
+    const prices = Object.keys(outstandingAsks);
 
     // sort is ascending, the smallest at the top
-    return Object.keys(outstandingAsks).sort();
-  }
+    const sorted = _.sortBy(prices, Number);
 
+    return sorted;
+  }
 }

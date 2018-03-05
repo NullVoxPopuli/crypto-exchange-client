@@ -34,13 +34,14 @@ async function listen(socket: AbstractWebSocketClient, balances: AssetBalances, 
 }
 
 const handleOpen = (socket: AbstractWebSocketClient, _markets: MarketPair[]) => () => {
-  // markets.forEach(market => {
-    // const symbol = market.pair;
-    const symbol = 'ETH-BTC';
-    const precision = 7;
+  const markets = [ {pair: 'ETH-USDT', precision: 2}, {pair: 'BTC-USDT', precision: 1}];
+  markets.forEach(market => {
+    const symbol = market.pair;
+    // const symbol = 'ETH-USDT';
+    const precision = market.precision;
 
     socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
-  // });
+  });
 };
 
 const handleReceivedOrderBookUpdate = (client: AbstractRestClient) => (data: OrderBookUpdateSummary) => {
