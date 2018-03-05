@@ -21,9 +21,11 @@ export interface RestClient {
     createLimitSellOrder(market: string, amount: string, price: string): Promise<Order>;
     createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order>;
 
-    createMarketBuyOrder(market: string, amount: string, price: string): Promise<Order>;
-    createMarketSellOrder(market: string, amount: string, price: string): Promise<Order>;
-    createMarketOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order>;
+    createMarketBuyOrder(market: string, amount: string): Promise<Order>;
+    createMarketSellOrder(market: string, amount: string): Promise<Order>;
+    createMarketOrder(market: string, amount: string, isBuySide: boolean): Promise<Order>;
+
+    createOrder(market: string, amount: string, price: string, type: string, isBuySide: boolean): Promise<Order>;
 
     makeRequest(path: string, options: any): Promise<any>;
 }
@@ -55,22 +57,28 @@ export class AbstractRestClient implements RestClient {
     public createLimitSellOrder(market: string, amount: string, price: string): Promise<Order> {
       return this.createLimitOrder(market, amount, price, false);
     }
-    public createLimitOrder(_market: string, _amount: string, _price: string, _isBuySide: boolean): Promise<Order> {
-        throw new Error('Not Implemented');
+    public createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order> {
+      return this.createOrder(market, amount, price, 'limit', isBuySide);
     }
 
-    public createMarketBuyOrder(market: string, amount: string, price: string): Promise<Order> {
-      return this.createMarketOrder(market, amount, price, true);
+    public createMarketBuyOrder(market: string, amount: string): Promise<Order> {
+      return this.createMarketOrder(market, amount, true);
     }
-    public createMarketSellOrder(market: string, amount: string, price: string): Promise<Order> {
-      return this.createMarketOrder(market, amount, price, false);
+    public createMarketSellOrder(market: string, amount: string): Promise<Order> {
+      return this.createMarketOrder(market, amount, false);
     }
-    public createMarketOrder(_market: string, _amount: string, _price: string, _isBuySide: boolean): Promise<Order> {
-      throw new Error('Not Implemented');
+    public createMarketOrder(market: string, amount: string, isBuySide: boolean): Promise<Order> {
+      return this.createOrder(market, amount, null, 'market', isBuySide);
     }
 
     public makeRequest(_path: string, _options: any): Promise<any> {
         throw new Error('Not Implemented');
+    }
+
+    public createOrder(
+      _market: string, _amount: string,
+      _price: string | null, _type: string, _isBuySide: boolean): Promise<Order> {
+      throw new Error('Not Implemented');
     }
 
     protected populateMarketPairCache(markets: MarketPair[]): void {

@@ -29,13 +29,23 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
       return parseInt(response.result.time, 10);
     }
 
+    public async getCurrencies() {
+      const response = await this.get('market/currencies');
+    }
+
     public async createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order> {
+      return this.createOrder(market, amount, price, 'limit', isBuySide);
+    }
+
+    public async createOrder(
+      market: string, amount: string, price: string,
+      type: string, isBuySide: boolean): Promise<Order> {
       const payload = {
         ['trading_pair_id']: market,
         // bid: willing to buy the quote at the max price (buys)
         // ask: asking for someone to pay me for my offer (sells)
         ['side']: isBuySide ? 'bid' : 'ask',
-        ['type']: 'limit',
+        ['type']: type,
         // quote price - quote/base == how many quotes make up a base
         ['price']: price,
         ['size']: amount,
@@ -53,6 +63,22 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
         this.populateMarketPairCache(markets);
 
         return markets;
+    }
+
+    public async getOrderBook(market: string, limit = 50) {
+      const response = await this.get(`market/orderbooks/${market}?limit=${limit}`);
+
+    }
+
+    public async getMarketStats() {
+      const response = await this.get('market/stats');
+
+      return response.result;
+    }
+
+    public async getTicker(market: string) {
+      const response = await this.get(`market/tickers/${market}`);
+
     }
 
     public async getBalances(): Promise<AssetBalances> {

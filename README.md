@@ -77,12 +77,47 @@ const order = await client.createLimitSellOrder('ETH-BTC', 2, '0.098');
 
 ## Cobinhood Rest Client
 
+Given that you have a CobinhoodRestClient,
+```ts
+const client = new CobinhoodRestClient();
+```
+
+The following mirrors the [cobinhood api documentation](https://cobinhood.github.io/api-public)
+
 <!-- start markets --> <details><summary>Markets</summary><p style="margin-left: 5px;"">
 
-## Markets
+### Markets
+
+NOTE: None of the market apis require auth.
+
+```ts
+client.getCurrencies()
+client.getMarkets()
+client.getOrderBook(market: string, limit = 50)
+client.getMarketStats()
+client.getTicker();
+client.getRecentTrades(market: string);
+```
+
+Interacting with the market data:
+
+```ts
+// { [symbol: string]: MarketPair }
+client.marketPairsBySymbol
+```
+
+All market data from the api requests are stored on an object of type `MarketPair`.
+
+Note that if a list of currency symbols is needed, but a separate request is not desired, that can be done with `Object.keys` on the `client.marketPairsBySymbol` data, and splitting on the separator, `-`.
+```ts
+const currencies = _.uniq(_.flatten(
+    Object.keys(marketPairsBySymbol).map(symbol => symbol.split('-'))
+))
+```
 
 <hr />
 </p></details> <!-- end markets -->
+
 
 <!-- start orders --> <details style='margin-right: 5px;'><summary>Orders</summary><p>
 
