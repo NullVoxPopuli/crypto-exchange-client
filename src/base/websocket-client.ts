@@ -51,7 +51,9 @@ export default abstract class AbstractWebSocketClient implements ExchangeWebSock
   }
 
   public onSubscribe(didSubscribe: (json: any) => void) {
-    this.didSubscribe = didSubscribe;
+    if (this.didSubscribe) {
+      this.didSubscribe = didSubscribe;
+    }
   }
 
   public send = (payload: object): void => {

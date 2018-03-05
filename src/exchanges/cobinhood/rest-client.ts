@@ -15,7 +15,7 @@ const CLOUDFLARE_NONCE_OFFSET = 150;
 
 export default class CobinhoodRestClient extends AbstractRestClient implements RestClient {
     public static baseUrl = 'https://api.cobinhood.com/v1/';
-    public SOCKET_CLIENT = CobinhoodFeed;
+    public SocketClient = CobinhoodFeed;
 
     public marketPairsBySymbol: { [symbol: string]: MarketPair } = {};
 

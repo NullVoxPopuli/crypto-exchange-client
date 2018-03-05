@@ -7,7 +7,7 @@ import { Order } from './order';
 import AbstractWebSocketClient, { ExchangeWebSocketFeed } from './websocket-client';
 
 export interface RestClient {
-    SOCKET_CLIENT: new() => AbstractWebSocketClient;
+    SocketClient: new() => AbstractWebSocketClient;
 
     marketPairsBySymbol: { [symbol: string]: MarketPair };
 
@@ -29,7 +29,7 @@ export interface RestClient {
 }
 
 export class AbstractRestClient implements RestClient {
-    public SOCKET_CLIENT: new() => AbstractWebSocketClient;
+    public SocketClient: new() => AbstractWebSocketClient;
 
     public marketPairsBySymbol: { [symbol: string]: MarketPair } = {};
 

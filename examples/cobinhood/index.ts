@@ -10,13 +10,6 @@ import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
 
 dotenv.config({ path: '.env' });
 
-const book: {
-  [symbol: string]: {
-    [side: string]: {
-      [price: number]: Decimal },
-  },
-} = {};
-
 Decimal.set({ precision: 8 }); // one more than max on exchange
 
 const zero = new Decimal(0);
@@ -24,10 +17,9 @@ const small = new Decimal(0.0000001);
 
 async function begin() {
   const client = new CobinhoodRestClient();
-  const socket = new client.SOCKET_CLIENT();
+  const socket = new client.SocketClient();
 
-  await client.getMarkets();
-
+  const markets = await client.getMarkets();
   const balances = await client.getBalances();
 
   await listen(socket, balances, client);
@@ -43,7 +35,6 @@ async function listen(socket: AbstractWebSocketClient, balances: AssetBalances, 
 
   socket.onReceiveOrderBookUpdate(handleReceivedOrderBookUpdate(client));
 
-  socket.onSubscribe(handleSubscribe);
   socket.connect();
 }
 
@@ -65,38 +56,21 @@ const handleOpen = (socket: AbstractWebSocketClient, client: AbstractRestClient)
   const marketsBySymbol = client.marketPairsBySymbol;
   const symbols = Object.keys(marketsBySymbol);
 
-  // symbols.forEach(symbol => {
   const symbol = 'ETH-BTC';
   const market = marketsBySymbol[symbol];
-  const precision = 7; // market.precision - 1;
+  const precision = market.precision || 7;
 
-  socket.subscribeTo('ticker', { trading_pair_id: symbol });
   socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
-  // });
 };
 
-// do something with order book data
 const handleReceivedOrderBookUpdate = (client: AbstractRestClient) => (data: OrderBookUpdateSummary) => {
   const { bids, asks, symbol, isSnapshot } = data;
   const market = client.getMarket(symbol);
 
   market.updateOrderBook(bids, asks, isSnapshot);
 
-  printOrderBook();
+  market.print();
+
 };
-
-// json here is a subscription response, which mostly contains
-// the subscription request data
-const handleSubscribe = (json: any) => {
-  console.log(json);
-};
-
-function printOrderBook() {
-  const markets = Object.keys(book);
-
-  markets.forEach(m => {
-    m.print();
-  });
-}
 
 begin();

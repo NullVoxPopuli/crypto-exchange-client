@@ -24,7 +24,11 @@ export default class CobinhoodFeed extends AbstractWebSocketClient implements Ex
   }
 
   protected handleOnOpen = () => {
-    this.didOpen && this.didOpen();
+    if (!this.didOpen) {
+      throw new Error(`the socket's didOpen is required. Set with socket.onOpen.`);
+    }
+
+    this.didOpen();
 
     // need to let the server know we're still here
     this.heartbeat = setInterval(this.ping, PING_PONG_DELAY);
@@ -39,25 +43,44 @@ export default class CobinhoodFeed extends AbstractWebSocketClient implements Ex
     const json: any = JSON.parse(payload);
     const { event, ['channel_id']: channelId } = json;
 
-    if (event) {
-      if (event === 'subscribed') {
-        this.didSubscribe(json);
-      } else if (event === 'pong') {
-        // idk
-      } else {
-        console.log(`
-          ------------------------
-          some event: `, payload);
-      }
-    } else if (channelId) {
-      if (channelId.includes('ticker')) {
+    if (event) return this.onMessageEvent(json);
+    else if (channelId) return this.onMessageChannel(json);
+
+    console.error('unhandled payload: ', payload);
+  }
+
+  protected onMessageEvent(json: any): void {
+    const { event } = json;
+
+    if (event === 'subscribed' && this.didSubscribe) {
+      return this.didSubscribe(json);
+    }
+
+    // do nothing, this is a response to our heartbeat
+    if (event === 'pong') return;
+  }
+
+  protected onMessageChannel(json: any) {
+    const { ['channel_id']: channelId } = json;
+
+    if (channelId.includes('ticker')) {
+      if (this.didReceiveTicker) {
         this.didReceiveTicker(new TickerUpdate(json));
-      } else if (channelId.includes('order-book')) {
-        const update = new OrderBookUpdate(json);
-        this.didReceiveOrderBookUpdate(update);
+      } else {
+        console.error('didReceiveTicker not set. Set with socket.onReceiveTicker');
       }
-    } else {
-      console.log('else? ', payload);
+
+      return;
+    }
+
+    if (channelId.includes('order-book')) {
+      if (this.didReceiveOrderBookUpdate) {
+        this.didReceiveOrderBookUpdate(new OrderBookUpdate(json));
+      } else {
+        console.error('didReceiveOrderBookUpdate not set. Set with socket.onReceiveOrderBookUpdate');
+      }
+
+      return;
     }
   }
 }

@@ -73,25 +73,26 @@ const order = await client.createLimitSellOrder('ETH-BTC', 2, '0.098');
 ```
 
 ### Full Cobinhood Documentation
-<!-- start cobinhood rest --><details><summary>Cobinhood Rest Client</summary>
+<!-- start cobinhood rest --><details><summary>Cobinhood Rest Client</summary><p>
 
 ## Cobinhood Rest Client
 
-<!-- start markets --> <details style='margin-right: 5px;'><summary>Markets</summary>
+<!-- start markets --> <details><summary>Markets</summary><p style="margin-left: 5px;"">
 
 ## Markets
 
+<hr />
+</p></details> <!-- end markets -->
 
-</details> <!-- end markets -->
-
-<!-- start orders --> <details style='margin-right: 5px;'><summary>Orders</summary>
+<!-- start orders --> <details style='margin-right: 5px;'><summary>Orders</summary><p>
 
 ## Orders
 
+<hr />
+</p></details> <!-- end orders -->
 
-</details> <!-- end orders -->
-
-</details> <!-- end cobinhood rest -->
+<hr />
+</p></details> <!-- end cobinhood rest -->
 
 
 <details><summary>Cobinhood Web Socket Client</summary>
