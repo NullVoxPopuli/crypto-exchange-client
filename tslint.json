@@ -34,7 +34,7 @@
         "no-empty": true,
         "no-empty-interface": true,
         "no-for-in-array": true,
-        "no-magic-numbers": [true, -1, 0, 1, 2, 3, 4, 5],
+        "no-magic-numbers": [false, -1, 0, 1, 2, 3, 4, 5],
         "no-require-imports": true,
         "no-unused-expression": false
 

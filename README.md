@@ -62,18 +62,48 @@ const handleSubscribe = (json: any) => {}
 
 ### Using the REST Client
 ```ts
+// getting all your balances
+const balances = await client.getBalances();
+
 // buying
 const order = await client.createLimitBuyOrder('ETH-BTC', 2, '0.098');
 // selling
 const order = await client.createLimitSellOrder('ETH-BTC', 2, '0.098');
 
-
-// methods on the REST client
-// see: base/rest-client.ts for additional methods
-getBalances(): Promise<AssetBalances>;
-getMarkets(): Promise<MarketPair[]>;
-getOpenOrders(): Promise<Order[]>;
 ```
+
+### Full Cobinhood Documentation
+<!-- start cobinhood rest --><details><summary>Cobinhood Rest Client</summary>
+
+## Cobinhood Rest Client
+
+<!-- start markets --> <details style='margin-right: 5px;'><summary>Markets</summary>
+
+## Markets
+
+
+</details> <!-- end markets -->
+
+<!-- start orders --> <details style='margin-right: 5px;'><summary>Orders</summary>
+
+## Orders
+
+
+</details> <!-- end orders -->
+
+</details> <!-- end cobinhood rest -->
+
+
+<details><summary>Cobinhood Web Socket Client</summary>
+
+
+<h4>Cobinhood Web Socket Client</h4>
+
+```ts
+const socket = new CobinhoodFeed();
+```
+</details>
+
 
 
 ### Support

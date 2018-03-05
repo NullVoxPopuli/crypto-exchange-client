@@ -41,8 +41,7 @@ async function listen(socket: AbstractWebSocketClient, balances: AssetBalances, 
 
   socket.onOpen(handleOpen(socket, client));
 
-  socket.onReceiveTicker(handleReceivedTicker);
-  socket.onReceiveOrderBookUpdate(handleReceivedOrderBookUpdate);
+  socket.onReceiveOrderBookUpdate(handleReceivedOrderBookUpdate(client));
 
   socket.onSubscribe(handleSubscribe);
   socket.connect();
@@ -76,41 +75,14 @@ const handleOpen = (socket: AbstractWebSocketClient, client: AbstractRestClient)
   // });
 };
 
-// do something with ticker data
-const handleReceivedTicker = (data: Ticker) => {
-  console.log(`
-    [Ticker Update] ${data.symbol}: ${data.price}
-    `);
-};
-
 // do something with order book data
-const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {
+const handleReceivedOrderBookUpdate = (client: AbstractRestClient) => (data: OrderBookUpdateSummary) => {
   const { bids, asks, symbol, isSnapshot } = data;
+  const market = client.getMarket(symbol);
 
-  book[symbol] = book[symbol] || { bids: {}, asks: {} };
-
-  asks.forEach((ask: OrderBookEntry) => {
-    const { price, count } = ask;
-    const oldCount = book[symbol].asks[ask.price];
-
-    const newValue = new Decimal(count || 0);
-    const value = isSnapshot ? newValue : (oldCount || zero).plus(newValue);
-
-    book[symbol].asks[ask.price] = value;
-  });
-
-  bids.forEach((bid: OrderBookEntry) => {
-    const { price, count } = bid;
-    const oldCount = book[symbol].bids[bid.price];
-
-    const newValue = new Decimal(count || 0);
-    const value = isSnapshot ? newValue : (oldCount || zero).plus(newValue);
-
-    book[symbol].bids[bid.price] = newValue;
-  });
+  market.updateOrderBook(bids, asks, isSnapshot);
 
   printOrderBook();
-
 };
 
 // json here is a subscription response, which mostly contains
@@ -122,32 +94,9 @@ const handleSubscribe = (json: any) => {
 function printOrderBook() {
   const markets = Object.keys(book);
 
-  console.log('\n\n', markets[0]);
-  const bids = book[markets[0]].bids;
-  const asks = book[markets[0]].asks;
-
-  console.log('asks');
-  const outstandingAsks = _.pickBy(asks, (value, _price) => (
-    value !== undefined &&
-    value !== null &&
-    !value.isZero()
-  ));
-
-  const outstandingBids = _.pickBy(bids, (value, _price) => (
-    value !== undefined &&
-    value !== null &&
-    value.greaterThan(small)
-  ));
-
-  Object.keys(outstandingAsks).sort().slice(0, 10).reverse().forEach(price => {
-    console.log(price, outstandingAsks[price].toNumber());
+  markets.forEach(m => {
+    m.print();
   });
-
-  console.log('bids');
-  Object.keys(outstandingBids).sort().reverse().slice(0, 10).forEach(price => {
-    console.log(price, outstandingBids[price].toNumber());
-  });
-
 }
 
 begin();

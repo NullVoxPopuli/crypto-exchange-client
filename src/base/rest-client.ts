@@ -15,6 +15,8 @@ export interface RestClient {
     getMarkets(): Promise<MarketPair[]>;
     getOpenOrders(): Promise<Order[]>;
 
+    getMarket(symbol: string): MarketPair;
+
     createLimitBuyOrder(market: string, amount: string, price: string): Promise<Order>;
     createLimitSellOrder(market: string, amount: string, price: string): Promise<Order>;
     createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order>;
@@ -27,7 +29,6 @@ export interface RestClient {
 }
 
 export class AbstractRestClient implements RestClient {
-    // <T extends Serializable>(constructorFn: new () => T)
     public SOCKET_CLIENT: new() => AbstractWebSocketClient;
 
     public marketPairsBySymbol: { [symbol: string]: MarketPair } = {};
@@ -42,6 +43,10 @@ export class AbstractRestClient implements RestClient {
 
     public getOpenOrders(): Promise<Order[]> {
         throw new Error('Not Implemented');
+    }
+
+    public getMarket(symbol: string): MarketPair {
+      return this.marketPairsBySymbol[symbol];
     }
 
     public createLimitBuyOrder(market: string, amount: string, price: string): Promise<Order> {
