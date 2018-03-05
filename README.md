@@ -4,6 +4,10 @@ Similar to ccxt, this project aims to provide a common interface for interacting
 
 Cobinhood is the only completed implementation, but this project is setup to allow for any number of implementations.
 
+## Installation
+
+Coming soon
+
 ## Cobinhood Usage
 
 [API Documentation](https://cobinhood.github.io/api-public/)
