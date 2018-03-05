@@ -26,18 +26,21 @@ async function listen(socket: AbstractWebSocketClient, balances: AssetBalances, 
   const markets = _.values(client.marketPairsBySymbol);
   const currencies = Object.keys(balances);
 
-  socket.onOpen(handleOpen(socket));
+  socket.onOpen(handleOpen(socket, markets));
 
   socket.onReceiveOrderBookUpdate(handleReceivedOrderBookUpdate(client));
 
   socket.connect();
 }
 
-const handleOpen = (socket: AbstractWebSocketClient) => () => {
-  const symbol = 'ETH-BTC';
-  const precision = 7;
+const handleOpen = (socket: AbstractWebSocketClient, _markets: MarketPair[]) => () => {
+  // markets.forEach(market => {
+    // const symbol = market.pair;
+    const symbol = 'ETH-BTC';
+    const precision = 7;
 
-  socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
+    socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
+  // });
 };
 
 const handleReceivedOrderBookUpdate = (client: AbstractRestClient) => (data: OrderBookUpdateSummary) => {
