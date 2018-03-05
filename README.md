@@ -30,7 +30,7 @@ yarn example ./examples/cobinhood
 import { CobinhoodRestClient, CobinhoodFeed } from 'crypto-exchange-client';
 
 const client = new CobinhoodRestClient();
-const socket = new client.SOCKET_CLIENT();
+const socket = new client.SocketClient();
 // or, specifically:
 const socket = new CobinhoodFeed();
 ```
