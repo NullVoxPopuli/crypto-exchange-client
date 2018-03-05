@@ -1,6 +1,6 @@
 {
   "name": "crypto-exchange-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A common typed interface for cryptocurrency REST and websocket clients",
   "repository": "git@github.com:NullVoxPopuli/crypto-exchange-client.git",
   "author": "Preston Sego <LPSego3+dev@gmail.com>",
