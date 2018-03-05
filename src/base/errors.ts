@@ -1,5 +1,9 @@
 export class RequestError extends Error {
   constructor(json: any) {
-    super(json);
+    const message = (
+      json.error_code
+    );
+
+    super(message);
   }
 }
