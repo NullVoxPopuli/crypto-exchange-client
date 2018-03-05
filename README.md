@@ -17,12 +17,12 @@ COBINHOOD_API_KEY="your-cobinhood-api-key"
 
 this will be loaded on boot of your application, and will throw an exception if `process.env.COBINHOOD_API_KEY` is an empty value when trying to access an authenticated endpoint (meaning, you don't _need_ an `.env` file, but it's handy for development).
 
-### Example App
+### Examples
 See `./examples/cobinhood`  
 run with
 
 ```bash
-yarn example ./examples/cobinhood
+yarn example ./examples/cobinhood/watch-market-depth.ts
 ```
 
 ### Creating Clients
@@ -88,7 +88,7 @@ The following mirrors the [cobinhood api documentation](https://cobinhood.github
 
 ### Markets
 
-NOTE: None of the market apis require auth.
+None of the market apis require auth.
 
 ```ts
 client.getCurrencies()
@@ -99,7 +99,7 @@ client.getTicker();
 client.getRecentTrades(market: string);
 ```
 
-Interacting with the market data:
+#### Interacting with the market data:
 
 ```ts
 // { [symbol: string]: MarketPair }
@@ -113,6 +113,12 @@ Note that if a list of currency symbols is needed, but a separate request is not
 const currencies = _.uniq(_.flatten(
     Object.keys(marketPairsBySymbol).map(symbol => symbol.split('-'))
 ))
+```
+
+#### Getting Cached Market
+
+```ts
+client.marketForSymbol('ETH-BTC');
 ```
 
 <hr />

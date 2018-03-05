@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
 import {
   AbstractRestClient, AbstractWebSocketClient, AssetBalances, MarketPair,
-  OrderBookEntry, OrderBookUpdateSummary, Ticker,
+  OrderBookUpdateSummary,
 } from '~/base';
 
 import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
@@ -11,9 +11,6 @@ import { CobinhoodFeed, CobinhoodRestClient } from '~/index';
 dotenv.config({ path: '.env' });
 
 Decimal.set({ precision: 8 }); // one more than max on exchange
-
-const zero = new Decimal(0);
-const small = new Decimal(0.0000001);
 
 async function begin() {
   const client = new CobinhoodRestClient();
@@ -29,43 +26,23 @@ async function listen(socket: AbstractWebSocketClient, balances: AssetBalances, 
   const markets = _.values(client.marketPairsBySymbol);
   const currencies = Object.keys(balances);
 
-  const marketPairs = marketsFromCurrencies(currencies, markets);
-
-  socket.onOpen(handleOpen(socket, client));
+  socket.onOpen(handleOpen(socket));
 
   socket.onReceiveOrderBookUpdate(handleReceivedOrderBookUpdate(client));
 
   socket.connect();
 }
 
-function marketsFromCurrencies(currencies: string[], markets: MarketPair[]): string[] {
-  const result: string[] = [];
-
-  currencies.forEach(currency => {
-    const relevant = markets.filter(m => {
-      return m.pair.includes(currency);
-    });
-
-    result.push(...relevant.map(r => r.pair));
-  });
-
-  return _.uniq(result);
-}
-
-const handleOpen = (socket: AbstractWebSocketClient, client: AbstractRestClient) => () => {
-  const marketsBySymbol = client.marketPairsBySymbol;
-  const symbols = Object.keys(marketsBySymbol);
-
+const handleOpen = (socket: AbstractWebSocketClient) => () => {
   const symbol = 'ETH-BTC';
-  const market = marketsBySymbol[symbol];
-  const precision = market.precision || 7;
+  const precision = 7;
 
   socket.subscribeTo('order-book', { trading_pair_id: symbol, precision: `1E-${precision}` });
 };
 
 const handleReceivedOrderBookUpdate = (client: AbstractRestClient) => (data: OrderBookUpdateSummary) => {
   const { bids, asks, symbol, isSnapshot } = data;
-  const market = client.getMarket(symbol);
+  const market = client.marketForSymbol(symbol);
 
   market.updateOrderBook(bids, asks, isSnapshot);
 

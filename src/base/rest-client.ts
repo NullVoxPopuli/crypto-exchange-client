@@ -47,7 +47,7 @@ export class AbstractRestClient implements RestClient {
         throw new Error('Not Implemented');
     }
 
-    public getMarket(symbol: string): MarketPair {
+    public marketForSymbol(symbol: string): MarketPair {
       return this.marketPairsBySymbol[symbol];
     }
 
