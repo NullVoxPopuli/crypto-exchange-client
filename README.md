@@ -53,22 +53,20 @@ const handleOpen = (socket) => () => {
 const handleReceivedTicker = (data: Ticker) => {};
 
 // do something with order book data
-const handleReceivedOrderBookUpdate = (data: OrderBookEntry) => {};
+const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {};
 
 // json here is a subscription response, which mostly contains
 // the subscription request data
 const handleSubscribe = (json: any) => {}
 ```
 
-### Using the REST Client
+### REST Client Overview
 ```ts
 // getting all your balances
 const balances = await client.getBalances();
 
 // buying
-const order = await client.createLimitBuyOrder('ETH-BTC', 2, '0.098');
-// selling
-const order = await client.createLimitSellOrder('ETH-BTC', 2, '0.098');
+const order = await client.createLimitBuyOrder('ETH-BTC', '2', '0.098');
 
 ```
 
@@ -127,7 +125,26 @@ client.marketForSymbol('ETH-BTC');
 
 <!-- start orders --> <details style='margin-right: 5px;'><summary>Orders</summary><p>
 
-## Orders
+### Orders
+
+All of these apis require auth
+```ts
+client.getOrder(id: string);
+client.getOpenOrders();
+
+client.createOrder(market: string, amount: string, price: string, type: string, isBuySide: boolean);
+// shorthands for createOrder
+client.createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean);
+client.createLimitBuyOrder(market: string, amount: string, price: string);
+client.createLimitSellOrder(market: string, amount: string, price: string);
+
+client.createMarketBuyOrder(market: string, amount: string);
+client.createMarketSellOrder(market: string, amount: string);
+client.createMarketOrder(market: string, amount: string, isBuySide: boolean);
+
+
+client.cancelOrder(id: string);
+```
 
 <hr />
 </p></details> <!-- end orders -->

@@ -31,6 +31,8 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
 
     public async getCurrencies() {
       const response = await this.get('market/currencies');
+
+      return response;
     }
 
     public async createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order> {
@@ -54,6 +56,16 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
       const response = await this.post('trading/orders', payload);
 
       return extractOrder(response.result.order);
+    }
+
+    public async getOrder(id: string) {
+      const response = await this.get(`trading/orders/${id}`);
+
+      return extractOrder(response.result.order);
+    }
+
+    public async cancelOrder(id: string) {
+      return await this.destroy(`trading/orders/${id}`);
     }
 
     public async getMarkets(): Promise<MarketPair[]> {

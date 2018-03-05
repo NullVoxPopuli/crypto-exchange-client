@@ -15,7 +15,7 @@ export interface RestClient {
     getMarkets(): Promise<MarketPair[]>;
     getOpenOrders(): Promise<Order[]>;
 
-    getMarket(symbol: string): MarketPair;
+    marketForSymbol(symbol: string): MarketPair;
 
     createLimitBuyOrder(market: string, amount: string, price: string): Promise<Order>;
     createLimitSellOrder(market: string, amount: string, price: string): Promise<Order>;
@@ -89,6 +89,10 @@ export class AbstractRestClient implements RestClient {
 
     protected async get(path: string): Promise<any> {
         return await this.makeRequest(path, { method: 'GET' });
+    }
+
+    protected async destroy(path: string): Promise<any> {
+        return await this.makeRequest(path, { method: 'DELETE' });
     }
 
     protected async post(path: string, params: any): Promise<any> {
