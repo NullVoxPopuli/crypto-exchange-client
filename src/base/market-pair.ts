@@ -2,6 +2,7 @@
 import Decimal from 'decimal.js';
 import * as _ from 'lodash';
 
+import { lPad } from 'utils';
 import { OrderBookEntry } from './messages/order-book-entry';
 import { SideOfTrade } from './side-of-trade';
 
@@ -18,7 +19,7 @@ const isPresent = (value: Decimal, _price: string) => (
   value.greaterThan(small)
 );
 
-const MAX_ORDER_BOOK_DISPLAY_SIZE = 5;
+const MAX_ORDER_BOOK_DISPLAY_SIZE = 10;
 
 export class MarketPair {
   public selling: string;
@@ -114,17 +115,19 @@ export class MarketPair {
     const bids = this.sortBids(this.bids);
 
     console.log(`
+      ------------
       ${this.pair}
     `);
 
-    console.log(`-- asks --`);
     asks.slice(0, MAX_ORDER_BOOK_DISPLAY_SIZE).reverse().forEach(price => {
-      console.log(price, this.asks[price].toNumber());
+      const volume = lPad(this.asks[price]);
+      console.log(`${volume} ${this.base}    @ ${lPad(price)} ${this.quote}`);
     });
 
-    console.log(`-- bids --`);
+    console.log(`\n   -- ▲ asks ▲    -   ▼ bids ▼ --\n`);
     bids.slice(0, MAX_ORDER_BOOK_DISPLAY_SIZE).forEach(price => {
-      console.log(price, this.bids[price].toNumber());
+      const volume = lPad(this.bids[price]);
+      console.log(`${volume} ${this.base}    @ ${lPad(price)} ${this.quote}`);
     });
   }
 
