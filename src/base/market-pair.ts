@@ -117,6 +117,8 @@ export class MarketPair {
     console.log(`
       ------------
       ${this.pair}
+
+        Amount           Price
     `);
 
     asks.slice(0, MAX_ORDER_BOOK_DISPLAY_SIZE).reverse().forEach(price => {
