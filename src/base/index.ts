@@ -3,6 +3,8 @@
 export { AssetBalances } from './asset-balances';
 export { SideOfTrade } from './side-of-trade';
 export { MarketPair } from './market-pair';
+export { Currency } from './currency';
+export { OrderBook } from './order-book';
 export { Order, OrderStatus, OrderType } from './order';
 
 export { RequestError } from './errors';

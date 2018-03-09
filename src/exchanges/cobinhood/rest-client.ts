@@ -2,12 +2,13 @@ import Decimal from 'decimal.js';
 import fetch from 'node-fetch';
 
 import {
-  AbstractRestClient, AssetBalances, MarketPair, Order, RequestError, RestClient,
+  AbstractRestClient, AssetBalances, Currency, MarketPair, Order, OrderBook, RequestError, RestClient,
 } from '~/base';
 import {
   extractBalances,
-  extractMarkets,
-  extractOpenOrders, extractOrder,
+  extractCurrencies,
+  extractMarkets, extractOpenOrders, extractOrder,
+  extractOrderBook,
 } from './data/extractions';
 import CobinhoodFeed from './websocket-client';
 
@@ -29,10 +30,10 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
       return parseInt(response.result.time, 10);
     }
 
-    public async getCurrencies() {
+    public async getCurrencies(): Promise<Currency[]> {
       const response = await this.get('market/currencies');
 
-      return response;
+      return extractCurrencies(response.result.currencies);
     }
 
     public async createLimitOrder(market: string, amount: string, price: string, isBuySide: boolean): Promise<Order> {
@@ -58,7 +59,7 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
       return extractOrder(response.result.order);
     }
 
-    public async getOrder(id: string) {
+    public async getOrder(id: string): Promise<Order> {
       const response = await this.get(`trading/orders/${id}`);
 
       return extractOrder(response.result.order);
@@ -77,9 +78,10 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
         return markets;
     }
 
-    public async getOrderBook(market: string, limit = 50) {
+    public async getOrderBook(market: string, limit = 50): Promise<OrderBook> {
       const response = await this.get(`market/orderbooks/${market}?limit=${limit}`);
 
+      return extractOrderBook(response.result.orderbook);
     }
 
     public async getMarketStats() {

@@ -1,8 +1,8 @@
 import { OrderBookEntry, OrderBookUpdateSummary } from '~/base';
 
-const PRICE = 0;
-const SIZE = 1;
-const COUNT = 2;
+export const PRICE = 0;
+export const SIZE = 1;
+export const COUNT = 2;
 
 export default class OrderBookUpdate implements OrderBookUpdateSummary {
     // from OrderBook

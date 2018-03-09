@@ -6,7 +6,7 @@ import { lPad } from 'utils';
 import { OrderBookEntry } from './messages/order-book-entry';
 import { SideOfTrade } from './side-of-trade';
 
-export interface OrderBook {
+export interface MarketOrderBook {
   [price: string]: Decimal;
 }
 
@@ -33,8 +33,8 @@ export class MarketPair {
   public quoteIncrement: Decimal;
   public precision: number;
 
-  public asks: OrderBook;
-  public bids: OrderBook;
+  public asks: MarketOrderBook;
+  public bids: MarketOrderBook;
 
   public pair: string;
 
@@ -133,7 +133,7 @@ export class MarketPair {
     });
   }
 
-  private sortBids(bids: OrderBook): string[] {
+  private sortBids(bids: MarketOrderBook): string[] {
     const outstandingBids = _.pickBy(bids, isPresent);
     const prices = Object.keys(outstandingBids);
 
@@ -143,7 +143,7 @@ export class MarketPair {
     return sorted.reverse();
   }
 
-  private sortAsks(asks: OrderBook): string[] {
+  private sortAsks(asks: MarketOrderBook): string[] {
     const outstandingAsks = _.pickBy(asks, isPresent);
     const prices = Object.keys(outstandingAsks);
 

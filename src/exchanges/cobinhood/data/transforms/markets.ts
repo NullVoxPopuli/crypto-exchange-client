@@ -1,5 +1,5 @@
-import { MarketPair } from '~/base';
 import Decimal from 'decimal.js';
+import { MarketPair } from '~/base';
 
 export function transformMarket(json: any): MarketPair {
     const {
