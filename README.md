@@ -54,7 +54,7 @@ const handleOpen = (socket) => () => {
 };
 
 // do something with ticker data
-const handleReceivedTicker = (data: Ticker) => {};
+const handleReceivedTicker = (data: TickerUpdate) => {};
 
 // do something with order book data
 const handleReceivedOrderBookUpdate = (data: OrderBookUpdateSummary) => {};

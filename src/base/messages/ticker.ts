@@ -1,4 +1,4 @@
-export interface Ticker {
+export interface TickerUpdate {
   // websocket
   channelType?: string;
   channelId?: string;

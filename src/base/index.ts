@@ -5,12 +5,13 @@ export { SideOfTrade } from './side-of-trade';
 export { MarketPair } from './market-pair';
 export { Currency } from './currency';
 export { OrderBook } from './order-book';
+export { Ticker } from './ticker';
 export { Order, OrderStatus, OrderType } from './order';
 
 export { RequestError } from './errors';
 
 // websocket messages
-export { Ticker } from './messages/ticker';
+export { TickerUpdate } from './messages/ticker';
 export { OrderBookEntry, OrderBookUpdateSummary } from './messages/order-book-entry';
 
 // clients

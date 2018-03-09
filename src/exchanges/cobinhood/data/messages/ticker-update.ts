@@ -1,4 +1,4 @@
-import { Ticker } from '~/base';
+import { TickerUpdate as BaseTickerUpdate } from '~/base';
 
 const LAST_TRADE_ID = 0;
 const PRICE = 1;
@@ -10,7 +10,7 @@ const LOW_24H = 6;
 const OPEN_24H = 7;
 const TIME_STAMP = 8;
 
-export default class TickerUpdate implements Ticker {
+export default class TickerUpdate implements BaseTickerUpdate {
   // from Ticker
   public info: any;
   public channelId: any;

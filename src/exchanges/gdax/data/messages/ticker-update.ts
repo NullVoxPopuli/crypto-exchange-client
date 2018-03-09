@@ -1,5 +1,4 @@
-import { Ticker } from '~/base';
-
+import { TickerUpdate } from '~/base';
 
   // The Ticker Channel
   //   {
@@ -14,7 +13,7 @@ import { Ticker } from '~/base';
   //     "best_bid": "4388",
   //     "best_ask": "4388.01"
   // }
-export default class GDAXTickerUpdate implements Ticker {
+export default class GDAXTickerUpdate implements TickerUpdate {
   // from Ticker
   public info: any;
   public channelId?: string | undefined;

@@ -2,13 +2,14 @@ import Decimal from 'decimal.js';
 import fetch from 'node-fetch';
 
 import {
-  AbstractRestClient, AssetBalances, Currency, MarketPair, Order, OrderBook, RequestError, RestClient,
+  AbstractRestClient, AssetBalances, Currency, MarketPair, Order, OrderBook, RequestError, RestClient, Ticker, Ticker,
 } from '~/base';
 import {
   extractBalances,
   extractCurrencies,
   extractMarkets, extractOpenOrders, extractOrder,
   extractOrderBook,
+  extractTicker,
 } from './data/extractions';
 import CobinhoodFeed from './websocket-client';
 
@@ -90,9 +91,10 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
       return response.result;
     }
 
-    public async getTicker(market: string) {
+    public async getTicker(market: string): Promise<Ticker> {
       const response = await this.get(`market/tickers/${market}`);
 
+      return extractTicker(response.result.ticker);
     }
 
     public async getBalances(): Promise<AssetBalances> {
