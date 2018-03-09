@@ -65,6 +65,10 @@ const handleSubscribe = (json: any) => {}
 ```
 
 ### REST Client Overview
+
+NOTE: this documentation is a work in progress. PRs to expand it will be more than welcome.
+
+
 ```ts
 // getting all your balances
 const balances = await client.getBalances();
@@ -78,6 +82,7 @@ const order = await client.createLimitBuyOrder('ETH-BTC', '2', '0.098');
 <!-- start cobinhood rest --><details><summary>Cobinhood Rest Client</summary><p>
 
 ## Cobinhood Rest Client
+
 
 Given that you have a CobinhoodRestClient,
 ```ts
