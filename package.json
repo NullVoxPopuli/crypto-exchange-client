@@ -1,6 +1,6 @@
 {
   "name": "crypto-exchange-client",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "A common typed interface for cryptocurrency REST and websocket clients",
   "repository": "git@github.com:NullVoxPopuli/crypto-exchange-client.git",
   "author": "Preston Sego <LPSego3+dev@gmail.com>",
@@ -11,18 +11,26 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "prepublishOnly": "./node_modules/.bin/tsc",
-    "test": "mocha --reporter spec",
+    "link-self": " if [ ! -d \"$PWD/node_modules/crypto-exchange-client\" ]; then npm link; npm link crypto-exchange-client; fi",
+    "test": "./node_modules/.bin/mocha -r ts-node/register --reporter spec ./tests/**",
     "example": "./node_modules/.bin/ts-node --no-cache -r tsconfig-paths/register "
   },
+  "directories": [
+    "dist"
+  ],
   "files": [
     "dist"
   ],
   "devDependencies": {
+    "@types/chai": "^4.1.2",
     "@types/decimal.js": "^7.4.0",
     "@types/lodash": "^4.14.104",
+    "@types/mocha": "^2.2.48",
     "@types/node": "^9.4.6",
     "@types/node-fetch": "^1.6.7",
     "@types/ws": "^4.0.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.4",
     "ts-node": "^5.0.1",
     "tsconfig-paths": "^3.1.1",
     "tslint": "^5.9.1",
