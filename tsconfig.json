@@ -3,10 +3,9 @@
     "rootDir": "src",
     "declaration": true,
     "baseUrl": "src",
-    "outDir": ".",
+    "outDir": "dist",
     "paths": {
       "*": ["*", "src/typings/*"],
-      "~/*": ["*"],
       "~/*": ["*"]
     },
     "typeRoots": [
@@ -43,5 +42,7 @@
   "include": [
     "src/**/*"
   ],
-  "exclude": []
+  "exclude": [
+    "node_modules",
+  ]
 }
