@@ -65,7 +65,11 @@ export default class GDAXRestClient extends AbstractRestClient implements RestCl
           ...options,
       };
 
-      return await fetch(url, fetchOptions).then((response: any) => response.json());
+      const requestStart = new Date().getTime();
+      const result = await fetch(url, fetchOptions).then((response: any) => response.json());
+      console.log(`${options.method} ${path}: ${(new Date().getTime()) - requestStart} ms`);
+
+      return result;
   }
 
   private createSignature(secret: string, timestamp: number, path: string, body: any, method: string) {
