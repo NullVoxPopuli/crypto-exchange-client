@@ -10,6 +10,7 @@ import {
   extractCurrencies,
   extractMarkets, extractOpenOrders, extractOrder,
   extractOrderBook,
+  extractOrders,
   extractTicker,
 } from './data/extractions';
 import CobinhoodFeed from './websocket-client';
@@ -110,6 +111,12 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
         return extractOpenOrders(response.result.orders);
     }
 
+    public async getOrders(): Promise<Order[]> {
+        const response = await this.get('trading/orders');
+
+        return extractOrders(response.result.orders);
+    }
+
     /***************************************************
      *  Helpers Functions
      **************************************************/
@@ -129,7 +136,9 @@ export default class CobinhoodRestClient extends AbstractRestClient implements R
             ...options,
         };
 
+        const requestStart = new Date().getTime();
         const result = await fetch(url, fetchOptions).then((response: any) => response.json());
+        console.log(`${options.method} ${path}: ${(new Date().getTime()) - requestStart} ms`);
 
         // since cloudflare is somewhat unreliable with realtime data
         // retry in case of failure (specifically invalid_nonce)
